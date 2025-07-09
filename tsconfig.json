@@ -23,6 +23,27 @@
     },
     {
       "path": "./libs/frontend/utils"
+    },
+    {
+      "path": "./libs/backend/auth"
+    },
+    {
+      "path": "./libs/backend/database"
+    },
+    {
+      "path": "./libs/backend/config"
+    },
+    {
+      "path": "./libs/backend/utils"
+    },
+    {
+      "path": "./libs/backend/common"
+    },
+    {
+      "path": "./libs/backend/features"
+    },
+    {
+      "path": "./libs/backend/infra"
     }
   ]
 }

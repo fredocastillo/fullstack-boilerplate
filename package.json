@@ -72,6 +72,7 @@
   },
   "workspaces": [
     "apps/*",
-    "libs/frontend/*"
+    "libs/frontend/*",
+    "libs/backend/*"
   ]
 }

@@ -27,7 +27,16 @@
           "buildDepsName": "build-deps",
           "watchDepsName": "watch-deps"
         }
-      }
+      },
+      "exclude": [
+        "libs/backend/auth/*",
+        "libs/backend/database/*",
+        "libs/backend/config/*",
+        "libs/backend/utils/*",
+        "libs/backend/common/*",
+        "libs/backend/features/*",
+        "libs/backend/infra/*"
+      ]
     },
     {
       "plugin": "@nx/react/router-plugin",
@@ -74,6 +83,23 @@
         "previewTargetName": "preview",
         "buildDepsTargetName": "build-deps",
         "watchDepsTargetName": "watch-deps"
+      }
+    },
+    {
+      "plugin": "@nx/js/typescript",
+      "include": [
+        "libs/backend/auth/*",
+        "libs/backend/database/*",
+        "libs/backend/config/*",
+        "libs/backend/utils/*",
+        "libs/backend/common/*",
+        "libs/backend/features/*",
+        "libs/backend/infra/*"
+      ],
+      "options": {
+        "typecheck": {
+          "targetName": "typecheck"
+        }
       }
     }
   ],
