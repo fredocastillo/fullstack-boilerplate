@@ -5,6 +5,9 @@
   "references": [
     {
       "path": "./apps/example-app"
+    },
+    {
+      "path": "./apps/example-svc"
     }
   ]
 }
