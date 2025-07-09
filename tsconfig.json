@@ -8,6 +8,21 @@
     },
     {
       "path": "./apps/example-svc"
+    },
+    {
+      "path": "./libs/frontend/auth"
+    },
+    {
+      "path": "./libs/frontend/components"
+    },
+    {
+      "path": "./libs/frontend/features"
+    },
+    {
+      "path": "./libs/frontend/ui"
+    },
+    {
+      "path": "./libs/frontend/utils"
     }
   ]
 }
