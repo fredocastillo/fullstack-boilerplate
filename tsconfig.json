@@ -44,6 +44,15 @@
     },
     {
       "path": "./libs/backend/infra"
+    },
+    {
+      "path": "./libs/shared/types"
+    },
+    {
+      "path": "./libs/shared/constants"
+    },
+    {
+      "path": "./libs/shared/utils"
     }
   ]
 }
