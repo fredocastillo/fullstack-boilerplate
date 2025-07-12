@@ -5,6 +5,8 @@ import { ThemeProvider } from '@frontend/utils';
 import { NavBar } from '../nav-bar/nav-bar';
 import { NavigationArea } from '../interfaces/navigation-areas';
 import { NavigationGroup } from '../interfaces/navigation-item';
+import Footer from '../footer/footer';
+import Banner from '../banner/banner';
 
 export interface MainLayoutProps {
   user: User;
@@ -37,10 +39,12 @@ export function MainLayout({
             groups={groups}
           />
           <div className="flex flex-col flex-1 overflow-hidden">
+            <Banner></Banner>
             <Header user={user} />
             <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-white dark:bg-gray-950">
               {children}
             </main>
+            <Footer />
           </div>
         </div>
       </SidebarProvider>

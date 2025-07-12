@@ -1,3 +1,5 @@
+export * from './lib/banner/banner';
+export * from './lib/footer/footer';
 export * from './lib/breadcrumbs/breadcrumbs';
 export * from './lib/header/header';
 export * from './lib/main-layout/main-layout';
