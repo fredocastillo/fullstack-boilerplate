@@ -1,20 +1,27 @@
 import { Route, Routes } from 'react-router-dom';
-import { MainLayout, NavigationUser } from '@frontend/layout';
-import { navigation } from '../routes/routes';
+import { MainLayout } from '@frontend/layout';
 import Dashboard from './dashboard/dashboard';
 import Home from './home/home';
 
+import { user } from './constants/user';
+import { navigationGroups } from './constants/routes';
+import { BarChart3 } from 'lucide-react';
+import { areas } from './constants/areas';
+
 export function App() {
-  const user: NavigationUser = {
-    firstName: 'Alfredo',
-    lastName: 'Castillo',
-    displayName: 'Castillo, Alfredo',
-    email: 'alfredo.castillo@gmail.com',
-    jobTitle: 'Full Stack Engineer Staff',
-    navigation,
-  };
+  const name = 'Enterprise Metrics';
+  const logo = BarChart3;
+  const areasName = 'Business Areas';
+
   return (
-    <MainLayout user={user}>
+    <MainLayout
+      user={user}
+      name={name}
+      logo={logo}
+      areasName={areasName}
+      areas={areas}
+      groups={navigationGroups}
+    >
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />

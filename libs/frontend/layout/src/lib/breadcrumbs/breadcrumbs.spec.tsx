@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import Sidebar from './sidebar';
+import Breadcrumbs from './breadcrumbs';
 
-describe('Sidebar', () => {
+describe('Breadcrumbs', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Sidebar />);
+    const { baseElement } = render(<Breadcrumbs />);
     expect(baseElement).toBeTruthy();
   });
 });
