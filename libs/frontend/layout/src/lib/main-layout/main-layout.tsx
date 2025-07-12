@@ -1,20 +1,20 @@
 import Header from '../header/header';
-import { NavigationItem } from '../interfaces/navigation-item';
+import { NavigationUser } from '../interfaces/navigation-user';
 import Sidebar from '../sidebar/sidebar';
 import { ThemeProvider } from '@frontend/utils';
 
 export interface MainLayoutProps {
   children: React.ReactNode;
-  navigation: NavigationItem[];
+  user: NavigationUser;
 }
 
-export function MainLayout({ children, navigation }: MainLayoutProps) {
+export function MainLayout({ children, user }: MainLayoutProps) {
   return (
     <ThemeProvider>
       <div className="flex h-screen overflow-hidden">
-        <Sidebar navigation={navigation} />
+        <Sidebar navigation={user.navigation} />
         <div className="flex flex-col flex-1 overflow-hidden">
-          <Header />
+          <Header user={user} />
           <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
         </div>
       </div>

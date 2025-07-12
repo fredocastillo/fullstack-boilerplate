@@ -1,12 +1,20 @@
 import { Route, Routes } from 'react-router-dom';
-import { MainLayout } from '@frontend/layout';
+import { MainLayout, NavigationUser } from '@frontend/layout';
 import { navigation } from '../routes/routes';
 import Dashboard from './dashboard/dashboard';
 import Home from './home/home';
 
 export function App() {
+  const user: NavigationUser = {
+    firstName: 'Alfredo',
+    lastName: 'Castillo',
+    displayName: 'Castillo, Alfredo',
+    email: 'alfredo.castillo@gmail.com',
+    jobTitle: 'Full Stack Engineer Staff',
+    navigation,
+  };
   return (
-    <MainLayout navigation={navigation}>
+    <MainLayout user={user}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
