@@ -3,6 +3,15 @@
   "include": [],
   "references": [
     {
+      "path": "../../libs/frontend/ui"
+    },
+    {
+      "path": "../../libs/frontend/components"
+    },
+    {
+      "path": "../../libs/frontend/layout"
+    },
+    {
       "path": "./tsconfig.app.json"
     },
     {

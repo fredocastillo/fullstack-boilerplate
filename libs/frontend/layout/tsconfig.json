@@ -6,6 +6,12 @@
       "path": "../utils"
     },
     {
+      "path": "../components"
+    },
+    {
+      "path": "../ui"
+    },
+    {
       "path": "./tsconfig.lib.json"
     },
     {
