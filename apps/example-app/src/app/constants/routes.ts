@@ -1,7 +1,6 @@
 import { NavigationItem } from '@frontend/layout';
 import {
   LayoutDashboard,
-  Users,
   FileText,
   BarChart3,
   Settings,
@@ -12,17 +11,13 @@ import {
   Database,
   Cable,
   Calendar,
-  Brain,
-  TrendingUp,
-  Eye,
-  Lightbulb,
-  Zap,
-  MessageSquare,
-  Shield,
-  TrendingDown,
-  Search,
-  Award,
   AlertTriangle,
+  ListOrdered,
+  GitBranch,
+  Link,
+  CheckCircle,
+  Star,
+  Cog,
 } from 'lucide-react';
 import { NavigationGroup } from '@frontend/layout';
 
@@ -35,7 +30,76 @@ const appicationNav: NavigationItem[] = [
   { title: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
 ];
 
+const systemEngineeringNav: NavigationItem[] = [
+  {
+    title: 'System Engineering',
+    icon: Cog,
+    children: [
+      {
+        title: 'Requirements Stability',
+        href: '/systems-engineering/requirements-stability',
+        icon: GitBranch,
+      },
+      {
+        title: 'Requirements Traceability',
+        href: '/systems-engineering/requirements-traceability',
+        icon: Link,
+      },
+      {
+        title: 'Requirements TBD/TBx Count',
+        href: '/systems-engineering/requirements-tbd-count',
+        icon: AlertTriangle,
+      },
+      {
+        title: 'Verification Status',
+        href: '/systems-engineering/verification-status',
+        icon: CheckCircle,
+      },
+      {
+        title: 'Customer Criticality',
+        href: '/systems-engineering/customer-criticality',
+        icon: Star,
+      },
+    ],
+  },
+];
+
+const corporateNav: NavigationItem[] = [
+  {
+    title: 'Technical Measures',
+    icon: LayoutDashboard,
+    children: [
+      {
+        title: 'Scorecard',
+        href: '/technical-measures/scorecard',
+        icon: ListOrdered,
+      },
+    ],
+  },
+];
+
 const adminNav: NavigationItem[] = [
+  {
+    title: 'Organization',
+    icon: Building2,
+    children: [
+      {
+        title: 'Business Areas',
+        href: '/organization/business-areas',
+        icon: Building2,
+      },
+      {
+        title: 'Lines of Business',
+        href: '/organization/lines-of-business',
+        icon: Layers,
+      },
+      {
+        title: 'Programs',
+        href: '/organization/programs',
+        icon: Target,
+      },
+    ],
+  },
   {
     title: 'Metrics',
     icon: BarChart3,
@@ -80,112 +144,6 @@ const adminNav: NavigationItem[] = [
   },
 ];
 
-const metricsNav: NavigationItem[] = [
-  {
-    title: 'Organization',
-    icon: Building2,
-    children: [
-      {
-        title: 'Business Areas',
-        href: '/organization/business-areas',
-        icon: Building2,
-      },
-      {
-        title: 'Lines of Business',
-        href: '/organization/lines-of-business',
-        icon: Layers,
-      },
-      {
-        title: 'Programs',
-        href: '/organization/programs',
-        icon: Target,
-      },
-    ],
-  },
-  {
-    title: 'AI & Analytics',
-    icon: Brain,
-    children: [
-      {
-        title: 'Predictive Analytics',
-        href: '/ai/predictive-analytics',
-        icon: TrendingUp,
-      },
-      {
-        title: 'Anomaly Detection',
-        href: '/ai/anomaly-detection',
-        icon: Eye,
-      },
-      {
-        title: 'Automated Insights',
-        href: '/ai/automated-insights',
-        icon: Lightbulb,
-      },
-      {
-        title: 'Smart Alerts',
-        href: '/ai/smart-alerts',
-        icon: Zap,
-      },
-      {
-        title: 'Natural Language Query',
-        href: '/ai/natural-language-query',
-        icon: MessageSquare,
-      },
-      {
-        title: 'Risk Prediction',
-        href: '/ai/risk-prediction',
-        icon: Shield,
-      },
-      {
-        title: 'Performance Optimization',
-        href: '/ai/performance-optimization',
-        icon: TrendingDown,
-      },
-      {
-        title: 'Data Discovery',
-        href: '/ai/data-discovery',
-        icon: Search,
-      },
-    ],
-  },
-  {
-    title: 'Dashboards',
-    icon: LayoutDashboard,
-    children: [
-      {
-        title: 'Corporate Technical Measures',
-        href: '/dashboards/corporate-technical-measures',
-        icon: TrendingUp,
-      },
-      {
-        title: 'Performance Analytics',
-        href: '/dashboards/performance',
-        icon: BarChart3,
-      },
-      {
-        title: 'Quality Metrics',
-        href: '/dashboards/quality-metrics',
-        icon: Award,
-      },
-      {
-        title: 'Resource Utilization',
-        href: '/dashboards/resource-utilization',
-        icon: Users,
-      },
-      {
-        title: 'Risk Analysis',
-        href: '/dashboards/risk-analysis',
-        icon: AlertTriangle,
-      },
-      {
-        title: 'Timeline Analysis',
-        href: '/dashboards/timeline-analysis',
-        icon: Calendar,
-      },
-    ],
-  },
-];
-
 export const navigationGroups: NavigationGroup[] = [
   {
     name: '',
@@ -193,7 +151,7 @@ export const navigationGroups: NavigationGroup[] = [
   },
   {
     name: 'Metrics',
-    items: metricsNav,
+    items: [...corporateNav, ...systemEngineeringNav],
   },
   {
     name: 'Admin',

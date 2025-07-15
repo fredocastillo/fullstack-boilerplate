@@ -1,7 +1,7 @@
 export interface PageHeaderProps {
   title: string;
   details: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export function PageHeader({ title, details, children }: PageHeaderProps) {
@@ -11,7 +11,7 @@ export function PageHeader({ title, details, children }: PageHeaderProps) {
         <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
         <p className="text-muted-foreground">{details}</p>
       </div>
-      <div className="flex gap-2">{children}</div>
+      {children && <div className="flex gap-2">{children}</div>}
     </div>
   );
 }

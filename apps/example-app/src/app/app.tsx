@@ -7,6 +7,7 @@ import { user } from './constants/user';
 import { navigationGroups } from './constants/routes';
 import { BarChart3 } from 'lucide-react';
 import { areas } from './constants/areas';
+import MetricViewPage from './technical-measures/scorecard';
 
 export function App() {
   const name = 'Enterprise Metrics';
@@ -25,6 +26,10 @@ export function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/technical-measures/scorecard"
+          element={MetricViewPage()}
+        />
       </Routes>
     </MainLayout>
   );
