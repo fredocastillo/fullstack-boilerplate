@@ -1982,7 +1982,7 @@ export default function MetricViewPage() {
   ]);
 
   const renderTableView = () => (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-gray-900 border-gray-800 p-4">
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
