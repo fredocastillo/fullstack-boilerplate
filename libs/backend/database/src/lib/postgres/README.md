@@ -125,8 +125,6 @@ Make sure to:
 - Point to compiled `.js` files if using the CLI (`dist/**`)
 - Include only one `DataSource` in the CLI entrypoint file
 
-> Would you like us to generate a sample `data-source.ts` file for CLI-based migrations?
-
 ---
 
 ## 📁 Files Included
