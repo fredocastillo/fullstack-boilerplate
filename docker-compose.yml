@@ -1,0 +1,229 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1-3-ubi8
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - '2181:2181'
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.0.1-3-ubi8
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - '9092:9092'
+      - '29092:29092' # Port for internal Kafka Connect communication if on different network
+      - '29094:29094'
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENERS: INTERNAL_LISTENER://kafka:29092,HOST_LISTENER://kafka:9092,EXTERNAL_LISTENER://kafka:29094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL_LISTENER://kafka:29092,HOST_LISTENER://localhost:9092,EXTERNAL_LISTENER://host.docker.internal:29094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL_LISTENER:PLAINTEXT,HOST_LISTENER:PLAINTEXT,EXTERNAL_LISTENER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL_LISTENER
+      # For Development Single Brocker Setup
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 # Default 3
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0 # Default 3000
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1 # Default 2
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1 # Default 3
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.6.2
+    container_name: kafka-ui
+    ports:
+      - '8080:8080' # Port to access the UI from your host
+    depends_on:
+      - kafka # Ensure Kafka is running before the UI starts
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local-kafka-cluster
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092 # Connect to the internal Kafka listener
+      # If you add Schema Registry later, uncomment and configure:
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181 # Only needed if you want Zookeeper management via UI
+      # KAFKA_CLUSTERS_0_JMXPORT: 9999 # Optional: For JMX monitoring if enabled on Kafka brokers
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.0.1-3-ubi8
+    hostname: schema-registry
+    container_name: schema-registry
+    ports:
+      - '8081:8081'
+    depends_on:
+      - kafka
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092' # Use internal Kafka listener
+
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect:7.0.1-3-ubi8 # Should match 7.0.1-3-ubi8
+    hostname: kafka-connect
+    container_name: kafka-connect
+    ports:
+      - '8083:8083'
+    depends_on:
+      - kafka
+      - schema-registry
+      - postgres
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka:29092'
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: 'connect-cluster'
+      CONNECT_CONFIG_STORAGE_TOPIC: 'connect-configs'
+      CONNECT_OFFSET_STORAGE_TOPIC: 'connect-offsets'
+      CONNECT_STATUS_STORAGE_TOPIC: 'connect-status'
+      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+
+      CONNECT_KEY_CONVERTER: 'io.confluent.connect.avro.AvroConverter'
+      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: 'true'
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
+      CONNECT_VALUE_CONVERTER: 'io.confluent.connect.avro.AvroConverter'
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: 'true'
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
+      # CONNECT_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      # CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: 'false'
+      # CONNECT_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      # CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: 'false'
+
+      CONNECT_INTERNAL_KEY_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_INTERNAL_VALUE_CONVERTER: 'org.apache.kafka.connect.json.JsonConverter'
+      CONNECT_INTERNAL_KEY_CONVERTER_SCHEMAS_ENABLE: 'false'
+      CONNECT_INTERNAL_VALUE_CONVERTER_SCHEMAS_ENABLE: 'false'
+    volumes:
+      # Mount custom connector JARs here, e.g.:
+      - ./connectors:/etc/kafka-connect/jars
+  mongodb:
+    image: mongo:latest
+    hostname: mongodb
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongodb_data:/data/db
+
+  postgres:
+    image: postgres:15
+    hostname: postgres
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: data_source
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data # Persistent data volume
+      # - ./sql/init_source.sql:/docker-entrypoint-initdb.d/init.sql # Script to initialize tables
+
+  # postgres-dw:
+  #   image: postgres:15
+  #   hostname: postgres-dw
+  #   container_name: postgres-dw
+  #   ports:
+  #     - "5433:5432"
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: metrics_dw
+  #   volumes:
+  #     - postgresql_dw_data:/var/lib/postgresql/data # Persistent data volume
+  #     - ./sql/init_dw.sql:/docker-entrypoint-initdb.d/init.sql # Script to initialize tables
+
+  # postgres-metabase:
+  #   image: postgres:15
+  #   hostname: postgres-metabase
+  #   container_name: postgres-metabase
+  #   ports:
+  #     - "5434:5432"
+  #   environment:
+  #     POSTGRES_USER: metabase_user # Dedicated user for Metabase's internal DB
+  #     POSTGRES_PASSWORD: metabase_password # Dedicated password
+  #     POSTGRES_DB: metabase_db # Dedicated database for Metabase's metadata
+  #   volumes:
+  #     - postgresql_metabase_data:/var/lib/postgresql/data # Persistent volume for Metabase data
+
+  # metabase:
+  #   image: metabase/metabase
+  #   hostname: metabase
+  #   container_name: metabase
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     MB_DB_TYPE: postgres
+  #     MB_DB_DBNAME: metabase_db # Metabase's own metadata DB
+  #     MB_DB_HOST: postgres-metabase
+  #     MB_DB_PORT: 5432
+  #     MB_DB_USER: metabase_user # Using the same user for simplicity in MVP, but isolate in production
+  #     MB_DB_PASS: metabase_password
+  #     MB_ADMIN_EMAIL: admin@example.com
+  #     MB_ADMIN_FIRST_NAME: Admin
+  #     MB_ADMIN_LAST_NAME: User
+  #     MB_ADMIN_PASSWORD: supersecretpassword
+  #     MB_SEND_ANONYMOUS_USAGE_DATA: "false"
+  #   depends_on:
+  #     - postgres-metabase
+
+  # ksqldb-server:
+  #   image: confluentinc/cp-ksqldb-server:7.0.1-3-ubi8
+  #   hostname: ksqldb-server
+  #   container_name: ksqldb-server
+  #   ports:
+  #     - "8088:8088" # REST API for ksqlDB
+  #   depends_on:
+  #     - kafka
+  #     - kafka-connect
+  #     - schema-registry
+  #   environment:
+  #     KSQL_LISTENERS: http://0.0.0.0:8088
+  #     KSQL_BOOTSTRAP_SERVERS: "kafka:29092"
+  #     KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+  #     KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: "true"
+  #     KSQL_KSQL_LOGGING_PROCESSING_ERROR_STREAM_AUTO_CREATE: "true"
+  #     KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET: earliest
+
+  # flink-jobmanager:
+  #   image: flink:java17
+  #   container_name: flink-jobmanager
+  #   hostname: flink-jobmanager
+  #   ports:
+  #     - "8085:8081"
+  #   environment:
+  #     - |
+  #       FLINK_PROPERTIES=
+  #       jobmanager.rpc.address: flink-jobmanager
+  #   command: jobmanager
+  #   volumes:
+  #     - ./flink-connectors:/opt/flink/usrlib
+  #   depends_on:
+  #     - kafka
+
+  # flink-taskmanager:
+  #   image: flink:java21
+  #   container_name: flink-taskmanager
+  #   hostname: flink-taskmanager
+  #   environment:
+  #     - |
+  #       FLINK_PROPERTIES=
+  #       jobmanager.rpc.address: flink-jobmanager
+  #       taskmanager.numberOfTaskSlots: 4
+  #   command: taskmanager
+  #   volumes:
+  #     - ./flink-connectors:/opt/flink/usrlib
+  #   depends_on:
+  #     - flink-jobmanager
+volumes:
+  mongodb_data:
+  postgresql_data:
+  # postgresql_dw_data:
+  # postgresql_metabase_data:
