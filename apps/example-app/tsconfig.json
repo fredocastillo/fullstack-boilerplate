@@ -3,6 +3,9 @@
   "include": [],
   "references": [
     {
+      "path": "../../libs/frontend/api"
+    },
+    {
       "path": "../../libs/frontend/ui"
     },
     {
