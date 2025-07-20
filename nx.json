@@ -35,7 +35,10 @@
         "libs/backend/utils/*",
         "libs/backend/common/*",
         "libs/backend/features/*",
-        "libs/backend/infra/*"
+        "libs/backend/infra/*",
+        "libs/backend/models/*",
+        "libs/backend/api/*",
+        "libs/backend/contracts/*"
       ]
     },
     {
@@ -94,7 +97,10 @@
         "libs/backend/utils/*",
         "libs/backend/common/*",
         "libs/backend/features/*",
-        "libs/backend/infra/*"
+        "libs/backend/infra/*",
+        "libs/backend/models/*",
+        "libs/backend/api/*",
+        "libs/backend/contracts/*"
       ],
       "options": {
         "typecheck": {

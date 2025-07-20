@@ -4,6 +4,15 @@
   "include": [],
   "references": [
     {
+      "path": "../database"
+    },
+    {
+      "path": "../models"
+    },
+    {
+      "path": "../../shared/types"
+    },
+    {
       "path": "./tsconfig.lib.json"
     },
     {

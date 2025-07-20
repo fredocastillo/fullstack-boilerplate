@@ -1,0 +1,51 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"],
+    "target": "es2021",
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false
+  },
+  "include": [
+    "src/**/*.ts",
+    "../contracts/src/lib/organization/business-area/business-area-response.dto.ts",
+    "../contracts/src/lib/organization/business-area/create-business-area.dto.ts",
+    "../contracts/src/lib/organization/business-area/update-business-area.dto.ts",
+    "../contracts/src/lib/organization/lob/create-lob.dto.ts",
+    "../contracts/src/lib/organization/lob/update-lob.dto.ts",
+    "../contracts/src/lib/organization/program/create-program.dto.ts",
+    "../contracts/src/lib/organization/program/update-program.dto.ts",
+    "../contracts/src/lib/metrics/metric/create-metric.dto.ts",
+    "../contracts/src/lib/metrics/metric/update-metric.dto.ts",
+    "../contracts/src/lib/metrics/metric-formula/create-metric-formula.dto.ts",
+    "../contracts/src/lib/metrics/metric-formula/update-metric-formula.dto.ts",
+    "../contracts/src/lib/metrics/metric-threshold/create-metric-threshold.dto.ts",
+    "../contracts/src/lib/metrics/metric-threshold/update-metric-threshold.dto.ts",
+    "../contracts/src/lib/metrics/program-metric/create-program-metric.dto.ts",
+    "../contracts/src/lib/metrics/program-metric/update-program-metric.dto.ts",
+    "../contracts/src/lib/metrics/reporting-month/create-reporting-month.dto.ts",
+    "../contracts/src/lib/metrics/reporting-month/update-reporting-month.dto.ts"
+  ],
+  "references": [
+    {
+      "path": "../contracts/tsconfig.lib.json"
+    },
+    {
+      "path": "../features/tsconfig.lib.json"
+    }
+  ],
+  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
+}

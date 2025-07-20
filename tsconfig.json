@@ -59,6 +59,18 @@
     },
     {
       "path": "./libs/frontend/api"
+    },
+    {
+      "path": "./libs/backend/models"
+    },
+    {
+      "path": "./libs/backend/api"
+    },
+    {
+      "path": "./libs/backend/contracts"
+    },
+    {
+      "path": "./libs/shared/interfaces"
     }
   ]
 }
